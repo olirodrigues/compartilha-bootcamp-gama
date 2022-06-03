@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import { ContainerCard, Text } from "./Card.style";
+import * as Styled from "./Card.style";
 
 interface CardProps {
   img: string;
@@ -9,12 +9,14 @@ interface CardProps {
 
 export function Card(props: CardProps) {
   return (
-    <ContainerCard>
+    <Styled.ContainerCard>
       <img src={props.img}></img>
-      <Typography variant='h3'>{props.title}</Typography>
-      <Typography variant='body1' align='center'>
+      <Typography variant='h3' color='primary' align='center'>
+        {props.title}
+      </Typography>
+      <Typography variant='body1' color='complementaryBlack' align='center'>
         {props.text}
       </Typography>
-    </ContainerCard>
+    </Styled.ContainerCard>
   );
 }

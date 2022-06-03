@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import type {} from "@mui/lab/themeAugmentation";
+import { flexbox } from "@mui/system";
 
 export const GlobalStyles = css`
   * {
@@ -107,13 +108,18 @@ const theme = createTheme({
     fontFamily: ["Inter"].join(","),
     h1: {
       fontSize: 34,
+      fontWeight: 700,
+      letterSpacing: "0.09em",
     },
     h2: {
       fontSize: 32,
+      fontWeight: 700,
+      letterSpacing: "0.09em",
     },
     h3: {
       fontSize: 24,
       fontWeight: 600,
+      letterSpacing: "0.46px",
     },
     h4: {
       fontSize: 20,
@@ -121,6 +127,7 @@ const theme = createTheme({
     },
     subtitle1: {
       fontSize: 20,
+      fontWeight: 400,
     },
     subtitle2: {
       fontSize: 19,
@@ -133,6 +140,8 @@ const theme = createTheme({
     },
     body1: {
       fontSize: 14,
+      fontWeight: 400,
+      letterSpacing: "0.46px",
     },
     bold: {
       fontWeight: 600,
@@ -146,15 +155,25 @@ export const Theme = createTheme(theme, {
       defaultProps: {
         style: {
           fontSize: "16px",
-          fontWeight: "700",
+          fontWeight: "600",
           textTransform: "none",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         },
       },
       variants: [
         {
+          props: { variant: "contained" },
+          style: {
+            borderRadius: "10px",
+            height: "45px",
+          },
+        },
+        {
           props: { variant: "borderPrimary" },
           style: {
-            borderRadius: 50,
+            borderRadius: "50px",
             backgroundColor: theme.palette.primary.main,
             color: theme.palette.getContrastText(theme.palette.primary.main),
           },

@@ -4,8 +4,11 @@ import { IconType } from "react-icons/lib";
 interface CardSaldoProps {
   dados: {
     title: string;
-    value: string;
-    icon: IconType;
+    value?: string;
+    icon?: IconType;
+    pendentes?: number;
+    pagas?: number;
+    total?: number;
   }[];
 }
 
@@ -22,9 +25,11 @@ export const CardSaldo = ({ dados }: CardSaldoProps) => {
                 </Typography>
                 <Typography variant='subtitle3'>R$ {dados.value}</Typography>
               </div>
-              <Box bgcolor='grey.300' height={40} width={40} p={1} borderRadius={5}>
-                <dados.icon size={24} />
-              </Box>
+              {dados.icon && (
+                <Box bgcolor='grey.300' height={40} width={40} p={1} borderRadius={5}>
+                  <dados.icon size={24} />
+                </Box>
+              )}
             </Grid>
           </Box>
         </Grid>

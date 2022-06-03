@@ -1,7 +1,9 @@
-import { Button, ContainerHeader } from "./Header.style";
-
 import Logo from "../../assets/images/logo.svg";
+
+import * as Styled from "./Header.style";
+
 import { Link } from "react-router-dom";
+import { Button } from "@mui/material";
 
 interface HeaderProps {
   HiddenBotao: boolean;
@@ -9,16 +11,16 @@ interface HeaderProps {
 
 export const Header = ({ HiddenBotao = false }: HeaderProps) => {
   return (
-    <ContainerHeader>
+    <Styled.ContainerHeader>
       <Link to='/'>
         <img className='logo' src={Logo} alt='' />
       </Link>
       {!HiddenBotao && (
         <Link to='/login'>
-          <Button variant='contained'>Acessar conta</Button>
+          <Button variant='borderSecondary'>Acessar conta</Button>
         </Link>
       )}
-    </ContainerHeader>
+    </Styled.ContainerHeader>
   );
 };
 

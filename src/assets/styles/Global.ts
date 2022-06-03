@@ -145,6 +145,8 @@ export const Theme = createTheme(theme, {
     MuiButton: {
       defaultProps: {
         style: {
+          fontSize: "16px",
+          fontWeight: "700",
           textTransform: "none",
         },
       },
@@ -160,9 +162,14 @@ export const Theme = createTheme(theme, {
         {
           props: { variant: "borderSecondary" },
           style: {
-            borderRadius: 50,
+            height: "45px",
+            borderRadius: "20px",
+            paddingInline: "36px",
             backgroundColor: theme.palette.secondary.main,
             color: theme.palette.getContrastText(theme.palette.secondary.main),
+            "&:hover": {
+              backgroundColor: theme.palette.secondary.dark,
+            },
           },
         },
       ],

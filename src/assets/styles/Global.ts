@@ -130,7 +130,7 @@ const theme = createTheme({
       fontWeight: 400,
     },
     subtitle2: {
-      fontSize: 19,
+      fontSize: 16,
       fontWeight: 400,
     },
     // TODO: define a better name for this

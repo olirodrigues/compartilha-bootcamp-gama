@@ -8,10 +8,6 @@ export const ContainerFooter = styled.div`
   font-size: 16px;
   padding: 46px 28px 74px;
   border-top: 1px solid #c4c4c4;
-
-  img {
-    width: 211px;
-  }
 `;
 
 export const ContainerIconeSocial = styled.ul`
@@ -20,16 +16,13 @@ export const ContainerIconeSocial = styled.ul`
 `;
 
 export const ItemListaSocial = styled.li`
-  border: 1px solid black;
+  border: 1px solid ${({ theme }) => theme.palette.primary.dark};
   border-radius: 50%;
   height: 35px;
   width: 35px;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  .homeSocialIcons {
-    height: 15px;
-    width: 15px;
-  }
+  color: ${({ theme }) => theme.palette.secondary.main};
+  cursor: pointer;
 `;

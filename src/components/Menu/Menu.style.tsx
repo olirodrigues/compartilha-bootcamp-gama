@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 
 export const ContainerMenu = styled.div`
   position: fixed;
-  background-color: #eeeeee;
+  background-color: #fcfcfc;
   height: 100vh;
   width: 268px;
   min-width: 268px;

@@ -55,6 +55,13 @@ declare module "@mui/material/Typography" {
   }
 }
 declare module "@mui/material/Button" {
+  interface ButtonPropsColorOverrides {
+    complementaryYellow: true;
+    complementaryBlue: true;
+    complementaryWhite: true;
+    complementaryBlack: true;
+  }
+
   interface ButtonPropsVariantOverrides {
     borderPrimary: true;
     borderSecondary: true;

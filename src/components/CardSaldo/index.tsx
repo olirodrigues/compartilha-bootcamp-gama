@@ -1,5 +1,6 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Paper, Typography } from "@mui/material";
 import { IconType } from "react-icons/lib";
+import { Card } from "../Card";
 
 interface CardSaldoProps {
   dados: {
@@ -17,7 +18,7 @@ export const CardSaldo = ({ dados }: CardSaldoProps) => {
     <Grid container spacing={2}>
       {dados.map((dados) => (
         <Grid item key={dados.title} xs>
-          <Box px={2} py={3} bgcolor='grey.200' borderRadius={"10px"}>
+          <Card>
             <Grid container direction='row' justifyContent='space-between' alignItems='center'>
               <div>
                 <Typography variant='body1' color='textSecondary' gutterBottom>
@@ -26,12 +27,12 @@ export const CardSaldo = ({ dados }: CardSaldoProps) => {
                 <Typography variant='subtitle3'>R$ {dados.value}</Typography>
               </div>
               {dados.icon && (
-                <Box bgcolor='grey.300' height={40} width={40} p={1} borderRadius={5}>
-                  <dados.icon size={24} />
+                <Box bgcolor='secondary.main' height={40} width={40} p={1} borderRadius={5}>
+                  <dados.icon color='white' size={24} />
                 </Box>
               )}
             </Grid>
-          </Box>
+          </Card>
         </Grid>
       ))}
     </Grid>

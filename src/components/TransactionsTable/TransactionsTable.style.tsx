@@ -6,6 +6,7 @@ export const ContainerTable = styled.div`
   margin-inline: auto;
   max-width: 1250px;
   min-width: 1000px;
+  width: 100%;
 `;
 
 export const StyledDataGrid = styledMUI(DataGrid)(() => ({

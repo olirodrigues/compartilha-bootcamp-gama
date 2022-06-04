@@ -7,10 +7,11 @@ import {
   MdRemoveCircleOutline,
 } from "react-icons/md";
 import { RiHandCoinLine } from "react-icons/ri";
+import { Grid } from "@mui/material";
+
 import { getReceitas } from "../../api/carteira";
 import { getCategorias } from "../../api/categoria";
 import { Categoria, Receita } from "../../@types/api";
-
 import { Cabecalho } from "../../components/Cabecalho";
 import { CardSaldo, parseSaldos, SaldoDado } from "../../components/CardSaldo";
 import { FilterMes } from "../../components/FilterMes";
@@ -63,7 +64,7 @@ const tableColumns = [
   {
     field: "descricao",
     headerName: "Descrição",
-    width: 204,
+    flex: 1,
   },
   {
     field: "categoria",
@@ -73,7 +74,7 @@ const tableColumns = [
   {
     field: "valor",
     headerName: "Valor",
-    width: 153,
+    width: 120,
     renderCell: (params: GridRenderCellParams) => <>R$ {params.value}</>,
   },
   {
@@ -81,10 +82,14 @@ const tableColumns = [
     headerName: "",
     width: 131,
     renderCell: (params: GridRenderCellParams) => (
-      <>
-        <MdModeEdit size={18} />
-        <MdOutlineDeleteOutline size={18} />
-      </>
+      <Grid container justifyContent='end' width='80px'>
+        <Grid item xs>
+          <MdModeEdit size={18} />
+        </Grid>
+        <Grid item xs>
+          <MdOutlineDeleteOutline size={18} />
+        </Grid>
+      </Grid>
     ),
   },
 ];

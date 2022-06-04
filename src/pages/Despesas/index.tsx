@@ -71,7 +71,7 @@ const tableColumns = [
   {
     field: "descricao",
     headerName: "Descrição",
-    width: 204,
+    flex: 1,
   },
   {
     field: "categoria",
@@ -81,16 +81,16 @@ const tableColumns = [
   {
     field: "valor",
     headerName: "Valor",
-    width: 153,
+    width: 120,
     renderCell: (params: GridRenderCellParams) => <>R$ {params.value}</>,
   },
 
   {
     field: "",
     headerName: "",
-    width: 131,
+    width: 170,
     renderCell: (params: GridRenderCellParams) => (
-      <Grid container spacing={3} justifyContent='end'>
+      <Grid container spacing={3} justifyContent='end' width='135px'>
         {params.row.compartilha === 1 && (
           <Grid item color='secondary.main'>
             <MdGroup size={18} />

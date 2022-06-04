@@ -9,7 +9,10 @@ export type TipoSaldo =
   | "Saldo atual"
   | "Receitas"
   | "Despesas"
-  | "Despesas compartilhadas";
+  | "Despesas compartilhadas"
+  | "Despesas pendentes"
+  | "Despesas pagas"
+  | "Total";
 
 export interface Saldo {
   descricao: TipoSaldo;

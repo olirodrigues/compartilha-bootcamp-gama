@@ -1,4 +1,3 @@
-import { Button } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import {
   MdOutlineGroups,
@@ -7,10 +6,10 @@ import {
   MdPriceCheck,
   MdModeEdit,
   MdOutlineDeleteOutline,
-  MdAdd,
 } from "react-icons/md";
+
 import { Cabecalho } from "../../components/Cabecalho";
-import { CardSaldo } from "../../components/CardSaldo";
+import { CardSaldo, parseSaldos } from "../../components/CardSaldo";
 import { FilterMes } from "../../components/FilterMes";
 import { FilterTransacao } from "../../components/FilterTransacao";
 import { Layout } from "../../components/Layout";
@@ -18,30 +17,33 @@ import { NovaDespesa } from "../../components/Modal/NovaDespesa";
 import { TransactionsTable } from "../../components/TransactionsTable";
 import * as Styled from "./Despesas.styles";
 
-export function Despesas() {
-  const dadosCard = [
-    {
-      title: "Despesas pendentes",
-      value: "0,00",
-      icon: MdRemoveCircleOutline,
-    },
-    {
-      title: "Despesas pagas",
-      value: "0,00",
-      icon: MdPriceCheck,
-    },
-    {
-      title: "Despesas compartilhadas",
-      value: "0,00",
-      icon: MdOutlineGroups,
-    },
-    {
-      title: "Total",
-      value: "0,00",
-      icon: MdOutlineCalculate,
-    },
-  ];
+const iconeDespesas = {
+  "Despesas pendentes": MdRemoveCircleOutline,
+  "Despesas pagas": MdPriceCheck,
+  "Despesas compartilhadas": MdOutlineGroups,
+  Total: MdOutlineCalculate,
+};
 
+const saldosPadrao = parseSaldos(iconeDespesas, [
+  {
+    descricao: "Despesas pendentes",
+    valor: 0,
+  },
+  {
+    descricao: "Despesas pagas",
+    valor: 0,
+  },
+  {
+    descricao: "Despesas compartilhadas",
+    valor: 0,
+  },
+  {
+    descricao: "Total",
+    valor: 0,
+  },
+]);
+
+export function Despesas() {
   const tableColumns = [
     {
       field: "status",
@@ -212,7 +214,7 @@ export function Despesas() {
         </Styled.ContainerActions>
         <FilterMes />
       </Styled.Container>
-      <CardSaldo dados={dadosCard} />
+      <CardSaldo dados={saldosPadrao} />
       <TransactionsTable tableColumns={tableColumns} tableRows={tableRows} />
     </Layout>
   );

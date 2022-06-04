@@ -1,17 +1,13 @@
 import ImagemLogin from "../../assets/images/Login/login.svg";
 import Logo from "../../assets/images/logo.svg";
+import { FaGoogle } from "react-icons/fa";
+
+import * as Styled from "./Login.style";
 
 import { Button, Divider, TextField, Typography } from "@mui/material";
-import { FaGoogle } from "react-icons/fa";
+
 import { useMediaQuery } from "react-responsive";
 import { Link } from "react-router-dom";
-import {
-  Container,
-  ContainerForm,
-  ContainerImagem,
-  FormContainer,
-  LoginGoogle,
-} from "./Login.style";
 
 export function Login() {
   const desktop = useMediaQuery({
@@ -19,21 +15,21 @@ export function Login() {
   });
 
   return (
-    <Container>
-      <ContainerForm>
+    <Styled.Container>
+      <Styled.ContainerForm>
         <Link to='/'>
           <img className='logo' src={Logo} alt='' />
         </Link>
         <Typography variant='h3' component='h1' color='complementaryBlack' sx={{ fontWeight: 700 }}>
           Acessar conta
         </Typography>
-        <LoginGoogle>
+        <Styled.LoginGoogle>
           <Button variant='borderGoogle' fullWidth startIcon={<FaGoogle />}>
             Entrar com o Google
           </Button>
-        </LoginGoogle>
+        </Styled.LoginGoogle>
         <Divider sx={{ width: "100%" }}>ou</Divider>
-        <FormContainer>
+        <Styled.FormContainer>
           <TextField variant='outlined'></TextField>
           <TextField variant='outlined'></TextField>
           <Link to='/dashboard'>
@@ -41,7 +37,7 @@ export function Login() {
               Entrar
             </Button>
           </Link>
-        </FormContainer>
+        </Styled.FormContainer>
         <Link to='/cadastro'>
           <Typography variant='body1' align='center'>
             Não tenho uma conta. <Typography variant='bold'>Cadastrar</Typography>
@@ -52,8 +48,8 @@ export function Login() {
             Esqueceu sua senha?
           </Typography>
         </a>
-      </ContainerForm>
-      {desktop && <ContainerImagem img={ImagemLogin} />}
-    </Container>
+      </Styled.ContainerForm>
+      {desktop && <Styled.ContainerImagem img={ImagemLogin} />}
+    </Styled.Container>
   );
 }

@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Grid } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import {
@@ -8,7 +8,7 @@ import {
   MdPriceCheck,
   MdModeEdit,
   MdOutlineDeleteOutline,
-  MdCheckCircleOutline,
+  MdGroup,
 } from "react-icons/md";
 import { Categoria, Despesa } from "../../@types/api";
 import { getDespesas } from "../../api/carteira";
@@ -90,10 +90,19 @@ const tableColumns = [
     headerName: "",
     width: 131,
     renderCell: (params: GridRenderCellParams) => (
-      <>
-        <MdModeEdit size={18} />
-        <MdOutlineDeleteOutline size={18} />
-      </>
+      <Grid container spacing={3} justifyContent='end'>
+        {params.row.compartilha === 1 && (
+          <Grid item color='secondary.main'>
+            <MdGroup size={18} />
+          </Grid>
+        )}
+        <Grid item>
+          <MdModeEdit size={18} />
+        </Grid>
+        <Grid item>
+          <MdOutlineDeleteOutline size={18} />
+        </Grid>
+      </Grid>
     ),
   },
 ];
@@ -112,6 +121,7 @@ const parseDespesas = (
         ({ idcategoria }) => despesa.categoria_idcategoria === idcategoria
       )?.descricao || "Não encontrada",
     valor: despesa.valor,
+    compartilha: despesa.compartilha,
   }));
 
 export function Despesas() {

@@ -13,3 +13,12 @@ export const getReceitas = async (idUsuario: number): Promise<Receita[]> =>
   fetch(buildURL(`/carteira/totalreceita/${idUsuario}`)).then((res) =>
     res.json()
   );
+
+export const addDespesa = async (despesa: Despesa) =>
+  fetch(buildURL(`/carteira/cadastrar/`), {
+    body: JSON.stringify(despesa),
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });

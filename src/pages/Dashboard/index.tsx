@@ -5,43 +5,61 @@ import {
   MdOutlineAttachMoney,
   MdOutlineGroups,
 } from "react-icons/md";
+import { useEffect, useState } from "react";
+
 import { Cabecalho } from "../../components/Cabecalho";
-import { CardSaldo } from "../../components/CardSaldo";
+import { CardSaldo, parseSaldos, SaldoDado } from "../../components/CardSaldo";
 import { FilterMes } from "../../components/FilterMes";
 import { Layout } from "../../components/Layout";
 import { DespesasCompartilhadas } from "./DespesasCompartilhadas";
 import { ContasECartoes } from "./ContasECartoes";
 import { DespesasPorCategoria } from "./DespesasPorCategoria";
+import { getSaldos } from "../../api/carteira";
+import { getUser } from "../../usuario";
+
+const iconeSaldos = {
+  "Saldo atual": MdOutlineAttachMoney,
+  Receitas: MdOutlineTrendingUp,
+  Despesas: MdOutlineTrendingDown,
+  "Despesas compartilhadas": MdOutlineGroups,
+};
+
+const saldosPadrao = parseSaldos(iconeSaldos, [
+  {
+    descricao: "Saldo atual",
+    valor: 0,
+  },
+  {
+    descricao: "Receitas",
+    valor: 0,
+  },
+  {
+    descricao: "Despesas",
+    valor: 0,
+  },
+  {
+    descricao: "Despesas compartilhadas",
+    valor: 0,
+  },
+]);
 
 export const Dashboard = () => {
-  const dadosCard = [
-    {
-      title: "Saldo atual",
-      value: "0,00",
-      icon: MdOutlineAttachMoney,
-    },
-    {
-      title: "Receitas",
-      value: "0,00",
-      icon: MdOutlineTrendingUp,
-    },
-    {
-      title: "Despesas",
-      value: "0,00",
-      icon: MdOutlineTrendingDown,
-    },
-    {
-      title: "Despesas compartilhadas",
-      value: "0,00",
-      icon: MdOutlineGroups,
-    },
-  ];
+  const [saldos, setSaldos] = useState<SaldoDado[]>(saldosPadrao);
+  const user = getUser();
+
+  useEffect(() => {
+    if (user) {
+      getSaldos(user?.idusuario).then((resposta) => {
+        setSaldos(parseSaldos(iconeSaldos, resposta));
+      });
+    }
+  }, [user]);
 
   return (
     <Layout>
       <Cabecalho title='Dashboard' name='OR' />
       <FilterMes />
-      <CardSaldo dados={dadosCard} />
+      <CardSaldo dados={saldos} />
       <Grid container spacing={2}>
         <Grid item xs>
           <ContasECartoes />

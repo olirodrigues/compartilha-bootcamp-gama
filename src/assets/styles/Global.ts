@@ -67,6 +67,7 @@ declare module "@mui/material/Button" {
   interface ButtonPropsVariantOverrides {
     borderPrimary: true;
     borderSecondary: true;
+    borderBlue: true;
     borderGoogle: true;
   }
 }
@@ -186,6 +187,9 @@ export const Theme = createTheme(theme, {
             backgroundColor: theme.palette.primary.main,
             color: theme.palette.getContrastText(theme.palette.primary.main),
           },
+          "&:hover": {
+            backgroundColor: theme.palette.primary.dark,
+          },
         },
         {
           props: { variant: "borderSecondary" },
@@ -201,13 +205,30 @@ export const Theme = createTheme(theme, {
           },
         },
         {
+          props: { variant: "borderBlue" },
+          style: {
+            height: "45px",
+            borderRadius: "20px",
+            paddingInline: "36px",
+            backgroundColor: theme.palette.complementaryBlue.main,
+            color: theme.palette.getContrastText(
+              theme.palette.complementaryBlue.main
+            ),
+            "&:hover": {
+              backgroundColor: theme.palette.complementaryBlue.dark,
+            },
+          },
+        },
+        {
           props: { variant: "borderGoogle" },
           style: {
             height: "45px",
             borderRadius: "20px",
             paddingInline: "36px",
             backgroundColor: theme.palette.complementaryWhite.main,
-            color: theme.palette.getContrastText(theme.palette.complementaryWhite.main),
+            color: theme.palette.getContrastText(
+              theme.palette.complementaryWhite.main
+            ),
             "&:hover": {
               backgroundColor: theme.palette.complementaryWhite.dark,
             },

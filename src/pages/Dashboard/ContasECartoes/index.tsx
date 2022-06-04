@@ -50,7 +50,12 @@ export const ContasECartoes = () => (
     </Typography>
 
     <Box mt={2}>
-      <Grid container spacing={1} marginTop={2}>
+      <Grid
+        container
+        spacing={1}
+        marginTop={2}
+        sx={{ display: "flex", gap: "15px" }}
+      >
         {["Nubank", "Inter", "Picpay"].map((cartao) => (
           <Grid item key={cartao}>
             <Typography variant='bold' color='primary'>
@@ -61,7 +66,7 @@ export const ContasECartoes = () => (
       </Grid>
     </Box>
 
-    <Button variant='contained' color='complementaryBlue'>
+    <Button sx={{ marginTop: "15px" }} variant='borderBlue'>
       Sincronizar contas e cartões
     </Button>
   </Card>

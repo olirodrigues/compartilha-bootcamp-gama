@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import {
@@ -7,6 +8,7 @@ import {
   MdPriceCheck,
   MdModeEdit,
   MdOutlineDeleteOutline,
+  MdCheckCircleOutline,
 } from "react-icons/md";
 import { Categoria, Despesa } from "../../@types/api";
 import { getDespesas } from "../../api/carteira";
@@ -56,6 +58,18 @@ const tableColumns = [
     field: "status",
     headerName: "Status",
     width: 144,
+    renderCell: (params: GridRenderCellParams) =>
+      params.value === "1" ? (
+        <Box color='success.main' display='flex' justifyContent='center'>
+          <MdCheckCircleOutline size={21} />
+          &nbsp;Pago
+        </Box>
+      ) : (
+        <Box color='error.main' display='flex' justifyContent='center'>
+          <MdRemoveCircleOutline size={21} />
+          &nbsp;Pendente
+        </Box>
+      ),
   },
   {
     field: "data",

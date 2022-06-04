@@ -9,26 +9,26 @@ import { TransactionsTable } from "../../components/TransactionsTable";
 import * as Styled from "./DespesasCompartilhadas.styles";
 
 export const DespesasCompartilhadas = () => {
-  const dadosCard = [
-    {
-      title: "Despesas Patricia",
-      pendentes: 450,
-      pagas: 715,
-      total: 1165,
-    },
-    {
-      title: "Despesas Gabriel",
-      pendentes: 450,
-      pagas: 715,
-      total: 1165,
-    },
-    {
-      title: "Total de despesas",
-      pendentes: 450,
-      pagas: 715,
-      total: 1165,
-    },
-  ];
+  // const dadosCard = [
+  //   {
+  //     title: "Despesas Patricia",
+  //     pendentes: 450,
+  //     pagas: 715,
+  //     total: 1165,
+  //   },
+  //   {
+  //     title: "Despesas Gabriel",
+  //     pendentes: 450,
+  //     pagas: 715,
+  //     total: 1165,
+  //   },
+  //   {
+  //     title: "Total de despesas",
+  //     pendentes: 450,
+  //     pagas: 715,
+  //     total: 1165,
+  //   },
+  // ];
 
   const tableColumns = [
     {
@@ -215,7 +215,7 @@ export const DespesasCompartilhadas = () => {
         <FilterTransacao />
         <FilterMes />
       </Styled.Container>
-      <CardSaldo dados={dadosCard} />
+      {/* <CardSaldo dados={dadosCard} /> */}
       <TransactionsTable tableColumns={tableColumns} tableRows={tableRows} />
     </Layout>
   );

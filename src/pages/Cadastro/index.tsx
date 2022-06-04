@@ -1,11 +1,10 @@
-import ImagemLogin from "../../assets/images/Cadastro/cadastro.svg";
+import ImagemCadastro from "../../assets/images/Cadastro/cadastro.svg";
 import Logo from "../../assets/images/logo.svg";
 
 import { Button, Divider, TextField, Typography } from "@mui/material";
 import { FaGoogle } from "react-icons/fa";
 import { useMediaQuery } from "react-responsive";
 import { Link } from "react-router-dom";
-import { Header } from "../../components/Header";
 import {
   Container,
   ContainerForm,
@@ -53,7 +52,7 @@ export const Cadastro = () => {
           </Link>
         </Typography>
       </ContainerForm>
-      {desktop && <ContainerImagem img={ImagemLogin} />}
+      {desktop && <ContainerImagem img={ImagemCadastro} />}
     </Container>
   );
 };

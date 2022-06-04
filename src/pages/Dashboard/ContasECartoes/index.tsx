@@ -50,12 +50,7 @@ export const ContasECartoes = () => (
     </Typography>
 
     <Box mt={2}>
-      <Grid
-        container
-        spacing={1}
-        marginTop={2}
-        sx={{ display: "flex", gap: "15px" }}
-      >
+      <Grid container spacing={2} marginTop={2}>
         {["Nubank", "Inter", "Picpay"].map((cartao) => (
           <Grid item key={cartao}>
             <Typography variant='bold' color='primary'>

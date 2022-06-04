@@ -48,7 +48,8 @@ export const ContainerImagem = styled.div<ContainerImagemProps>`
   position: fixed;
   top: 0;
   right: 0;
-  width: 50%;
+  max-width: 50%;
+  min-width: 764px;
   height: 100vh;
   background-image: url(${(props) => props.img});
   background-size: cover;

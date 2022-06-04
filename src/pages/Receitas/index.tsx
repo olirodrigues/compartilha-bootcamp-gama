@@ -6,8 +6,9 @@ import {
   MdRemoveCircleOutline,
 } from "react-icons/md";
 import { RiHandCoinLine } from "react-icons/ri";
+
 import { Cabecalho } from "../../components/Cabecalho";
-import { CardSaldo } from "../../components/CardSaldo";
+import { CardSaldo, parseSaldos } from "../../components/CardSaldo";
 import { FilterMes } from "../../components/FilterMes";
 import { FilterTransacao } from "../../components/FilterTransacao";
 import { Layout } from "../../components/Layout";
@@ -15,25 +16,28 @@ import { NovaReceita } from "../../components/Modal/NovaReceita";
 import { TransactionsTable } from "../../components/TransactionsTable";
 import * as Styled from "./Receitas.styles";
 
-export const Receitas = () => {
-  const dadosCard = [
-    {
-      title: "Receitas recebidas",
-      value: "0,00",
-      icon: RiHandCoinLine,
-    },
-    {
-      title: "Receitas pendentes",
-      value: "0,00",
-      icon: MdRemoveCircleOutline,
-    },
-    {
-      title: "Total",
-      value: "0,00",
-      icon: MdOutlineCalculate,
-    },
-  ];
+const iconeDespesas = {
+  "Receitas recebidas": RiHandCoinLine,
+  "Receitas pendentess": MdRemoveCircleOutline,
+  Total: MdOutlineCalculate,
+};
 
+const saldosPadrao = parseSaldos(iconeDespesas, [
+  {
+    descricao: "Receitas recebidas",
+    valor: 0,
+  },
+  {
+    descricao: "Receitas pendentes",
+    valor: 0,
+  },
+  {
+    descricao: "Total",
+    valor: 0,
+  },
+]);
+
+export const Receitas = () => {
   const tableColumns = [
     {
       field: "status",
@@ -203,7 +207,7 @@ export const Receitas = () => {
         </Styled.ContainerActions>
         <FilterMes />
       </Styled.Container>
-      <CardSaldo dados={dadosCard} />
+      <CardSaldo dados={saldosPadrao} />
       <TransactionsTable tableColumns={tableColumns} tableRows={tableRows} />
     </Layout>
   );

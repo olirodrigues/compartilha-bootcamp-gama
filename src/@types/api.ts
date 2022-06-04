@@ -12,6 +12,8 @@ export type TipoSaldo =
   | "Despesas compartilhadas"
   | "Despesas pendentes"
   | "Despesas pagas"
+  | "Receitas recebidas"
+  | "Receitas pendentes"
   | "Total";
 
 export interface Saldo {

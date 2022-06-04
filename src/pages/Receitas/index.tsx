@@ -1,4 +1,5 @@
 import { GridRenderCellParams } from "@mui/x-data-grid";
+import { useEffect, useState } from "react";
 import {
   MdModeEdit,
   MdOutlineCalculate,
@@ -6,19 +7,27 @@ import {
   MdRemoveCircleOutline,
 } from "react-icons/md";
 import { RiHandCoinLine } from "react-icons/ri";
+import { getReceitas } from "../../api/carteira";
+import { getCategorias } from "../../api/categoria";
+import { Categoria, Receita } from "../../@types/api";
 
 import { Cabecalho } from "../../components/Cabecalho";
-import { CardSaldo, parseSaldos } from "../../components/CardSaldo";
+import { CardSaldo, parseSaldos, SaldoDado } from "../../components/CardSaldo";
 import { FilterMes } from "../../components/FilterMes";
 import { FilterTransacao } from "../../components/FilterTransacao";
 import { Layout } from "../../components/Layout";
 import { NovaReceita } from "../../components/Modal/NovaReceita";
-import { TransactionsTable } from "../../components/TransactionsTable";
+import {
+  TransacaoView,
+  TransactionsTable,
+} from "../../components/TransactionsTable";
+import { getUser } from "../../usuario";
 import * as Styled from "./Receitas.styles";
+import { Status } from "../../components/TransactionsTable/Status";
 
 const iconeDespesas = {
   "Receitas recebidas": RiHandCoinLine,
-  "Receitas pendentess": MdRemoveCircleOutline,
+  "Receitas pendentes": MdRemoveCircleOutline,
   Total: MdOutlineCalculate,
 };
 
@@ -37,165 +46,108 @@ const saldosPadrao = parseSaldos(iconeDespesas, [
   },
 ]);
 
-export const Receitas = () => {
-  const tableColumns = [
-    {
-      field: "status",
-      headerName: "Status",
-      width: 144,
-    },
-    {
-      field: "data",
-      headerName: "Data",
-      width: 151,
-    },
-    {
-      field: "descricao",
-      headerName: "Descrição",
-      width: 204,
-    },
-    {
-      field: "categoria",
-      headerName: "Categoria",
-      width: 157,
-    },
-    {
-      field: "valor",
-      headerName: "Valor",
-      width: 153,
-    },
-    {
-      field: "",
-      headerName: "",
-      width: 131,
-      renderCell: (params: GridRenderCellParams) => (
-        <>
-          <MdModeEdit size={18} />
-          <MdOutlineDeleteOutline size={18} />
-        </>
-      ),
-    },
-  ];
+const tableColumns = [
+  {
+    field: "status",
+    headerName: "Status",
+    width: 144,
+    renderCell: (params: GridRenderCellParams) => (
+      <Status value={params.value} />
+    ),
+  },
+  {
+    field: "data",
+    headerName: "Data",
+    width: 151,
+  },
+  {
+    field: "descricao",
+    headerName: "Descrição",
+    width: 204,
+  },
+  {
+    field: "categoria",
+    headerName: "Categoria",
+    width: 157,
+  },
+  {
+    field: "valor",
+    headerName: "Valor",
+    width: 153,
+    renderCell: (params: GridRenderCellParams) => <>R$ {params.value}</>,
+  },
+  {
+    field: "",
+    headerName: "",
+    width: 131,
+    renderCell: (params: GridRenderCellParams) => (
+      <>
+        <MdModeEdit size={18} />
+        <MdOutlineDeleteOutline size={18} />
+      </>
+    ),
+  },
+];
 
-  const tableRows = [
-    {
-      id: 1,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "1 Receita do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 2,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "2 Receita do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 3,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "3 Receita do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 4,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "4 Receita do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 5,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "5 Receita do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 6,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "6 Receita do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 7,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "7 Receita do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 8,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "8 Receita do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 9,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "9 Receita do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 10,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "10 Receita do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 11,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "11 Receita do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 12,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "12 Receita do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 13,
-      status: "Pendente",
-      data: "22/05/2020",
-      descricao: "Receita do noite",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-  ];
+const parseReceitas = (
+  receitas: Receita[],
+  categorias: Categoria[]
+): TransacaoView[] =>
+  receitas.map((receita) => ({
+    id: receita.idcarteira,
+    status: receita.status,
+    data: receita.data,
+    descricao: receita.descricao,
+    categoria:
+      categorias.find(
+        ({ idcategoria }) => receita.categoria_idcategoria === idcategoria
+      )?.descricao || "Não encontrada",
+    valor: receita.valor,
+  }));
+
+export const Receitas = () => {
+  const usuario = getUser();
+  const [receitas, setReceitas] = useState<TransacaoView[]>([]);
+  const [saldos, setSaldos] = useState<SaldoDado[]>(saldosPadrao);
+
+  useEffect(() => {
+    if (usuario) {
+      Promise.all([getReceitas(usuario.idusuario), getCategorias()]).then(
+        ([respostaReceitas, respostaCategorias]) => {
+          setReceitas(parseReceitas(respostaReceitas, respostaCategorias));
+          setSaldos(
+            parseSaldos(iconeDespesas, [
+              {
+                descricao: "Receitas recebidas",
+                valor: respostaReceitas
+                  .filter((receita) => receita.status === `1`)
+                  .reduce(
+                    (valorPendente, receita) => valorPendente + receita.valor,
+                    0
+                  ),
+              },
+              {
+                descricao: "Receitas pendentes",
+                valor: respostaReceitas
+                  .filter((receita) => receita.status === `0  `)
+                  .reduce(
+                    (valorPendente, receita) => valorPendente + receita.valor,
+                    0
+                  ),
+              },
+              {
+                descricao: "Total",
+                valor: respostaReceitas.reduce(
+                  (valorPendente, receita) => valorPendente + receita.valor,
+                  0
+                ),
+              },
+            ])
+          );
+        }
+      );
+    }
+  }, [usuario]);
 
   return (
     <Layout>
@@ -207,8 +159,8 @@ export const Receitas = () => {
         </Styled.ContainerActions>
         <FilterMes />
       </Styled.Container>
-      <CardSaldo dados={saldosPadrao} />
-      <TransactionsTable tableColumns={tableColumns} tableRows={tableRows} />
+      <CardSaldo dados={saldos} />
+      <TransactionsTable tableColumns={tableColumns} tableRows={receitas} />
     </Layout>
   );
 };

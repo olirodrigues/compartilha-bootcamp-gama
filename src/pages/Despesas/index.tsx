@@ -24,6 +24,7 @@ import {
   TransacaoView,
   TransactionsTable,
 } from "../../components/TransactionsTable";
+import { Status } from "../../components/TransactionsTable/Status";
 import { getUser } from "../../usuario";
 import * as Styled from "./Despesas.styles";
 
@@ -58,18 +59,9 @@ const tableColumns = [
     field: "status",
     headerName: "Status",
     width: 144,
-    renderCell: (params: GridRenderCellParams) =>
-      params.value === "1" ? (
-        <Box color='success.main' display='flex' justifyContent='center'>
-          <MdCheckCircleOutline size={21} />
-          &nbsp;Pago
-        </Box>
-      ) : (
-        <Box color='error.main' display='flex' justifyContent='center'>
-          <MdRemoveCircleOutline size={21} />
-          &nbsp;Pendente
-        </Box>
-      ),
+    renderCell: (params: GridRenderCellParams) => (
+      <Status value={params.value} />
+    ),
   },
   {
     field: "data",

@@ -8,8 +8,9 @@ import {
   MdModeEdit,
   MdOutlineDeleteOutline,
 } from "react-icons/md";
-import { Despesa } from "../../@types/api";
+import { Categoria, Despesa } from "../../@types/api";
 import { getDespesas } from "../../api/carteira";
+import { getCategorias } from "../../api/categoria";
 
 import { Cabecalho } from "../../components/Cabecalho";
 import { CardSaldo, parseSaldos, SaldoDado } from "../../components/CardSaldo";
@@ -67,7 +68,7 @@ const tableColumns = [
     width: 204,
   },
   {
-    field: "categoria_idcategoria",
+    field: "categoria",
     headerName: "Categoria",
     width: 157,
   },
@@ -91,13 +92,19 @@ const tableColumns = [
   },
 ];
 
-const parseDespesas = (despesas: Despesa[]): TransacaoView[] =>
+const parseDespesas = (
+  despesas: Despesa[],
+  categorias: Categoria[]
+): TransacaoView[] =>
   despesas.map((despesa) => ({
     id: despesa.idcarteira,
     status: despesa.status,
     data: despesa.data,
     descricao: despesa.descricao,
-    categoria: despesa.categoria_idcategoria + ``,
+    categoria:
+      categorias.find(
+        ({ idcategoria }) => despesa.categoria_idcategoria === idcategoria
+      )?.descricao || "Não encontrada",
     valor: despesa.valor,
   }));
 
@@ -108,47 +115,49 @@ export function Despesas() {
 
   useEffect(() => {
     if (usuario) {
-      getDespesas(usuario.idusuario).then((resposta) => {
-        setDespesas(parseDespesas(resposta));
-        setSaldos(
-          parseSaldos(iconeDespesas, [
-            {
-              descricao: "Despesas pendentes",
-              valor: resposta
-                .filter((despesa) => despesa.status === `0`)
-                .reduce(
+      Promise.all([getDespesas(usuario.idusuario), getCategorias()]).then(
+        ([respostaDespesas, respostaCategorias]) => {
+          setDespesas(parseDespesas(respostaDespesas, respostaCategorias));
+          setSaldos(
+            parseSaldos(iconeDespesas, [
+              {
+                descricao: "Despesas pendentes",
+                valor: respostaDespesas
+                  .filter((despesa) => despesa.status === `0`)
+                  .reduce(
+                    (valorPendente, despesa) => valorPendente + despesa.valor,
+                    0
+                  ),
+              },
+              {
+                descricao: "Despesas pagas",
+                valor: respostaDespesas
+                  .filter((despesa) => despesa.status === `1`)
+                  .reduce(
+                    (valorPendente, despesa) => valorPendente + despesa.valor,
+                    0
+                  ),
+              },
+              {
+                descricao: "Despesas compartilhadas",
+                valor: respostaDespesas
+                  .filter((despesa) => despesa.compartilha === 1)
+                  .reduce(
+                    (valorPendente, despesa) => valorPendente + despesa.valor,
+                    0
+                  ),
+              },
+              {
+                descricao: "Total",
+                valor: respostaDespesas.reduce(
                   (valorPendente, despesa) => valorPendente + despesa.valor,
                   0
                 ),
-            },
-            {
-              descricao: "Despesas pagas",
-              valor: resposta
-                .filter((despesa) => despesa.status === `1`)
-                .reduce(
-                  (valorPendente, despesa) => valorPendente + despesa.valor,
-                  0
-                ),
-            },
-            {
-              descricao: "Despesas compartilhadas",
-              valor: resposta
-                .filter((despesa) => despesa.compartilha === 1)
-                .reduce(
-                  (valorPendente, despesa) => valorPendente + despesa.valor,
-                  0
-                ),
-            },
-            {
-              descricao: "Total",
-              valor: resposta.reduce(
-                (valorPendente, despesa) => valorPendente + despesa.valor,
-                0
-              ),
-            },
-          ])
-        );
-      });
+              },
+            ])
+          );
+        }
+      );
     }
   }, [usuario]);
 

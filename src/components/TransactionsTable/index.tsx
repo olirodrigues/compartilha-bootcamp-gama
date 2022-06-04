@@ -1,19 +1,24 @@
 import { GridColDef } from "@mui/x-data-grid";
 import * as Styled from "./TransactionsTable.style";
 
-interface TransactionsTableProps {
-  tableColumns: GridColDef[];
-  tableRows: {
-    id: string;
-    status: string;
-    data: string;
-    descricao: string;
-    categoria: string;
-    valor: number;
-  }[];
+export interface TransacaoView {
+  id: number;
+  status: string;
+  data: string;
+  descricao: string;
+  categoria: string;
+  valor: number;
 }
 
-export function TransactionsTable({ tableColumns, tableRows }: TransactionsTableProps) {
+interface TransactionsTableProps {
+  tableColumns: GridColDef[];
+  tableRows: TransacaoView[];
+}
+
+export function TransactionsTable({
+  tableColumns,
+  tableRows,
+}: TransactionsTableProps) {
   return (
     <Styled.ContainerTable>
       <Styled.StyledDataGrid

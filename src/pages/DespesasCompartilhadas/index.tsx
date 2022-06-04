@@ -16,7 +16,7 @@ import {
   TransactionsTable,
 } from "../../components/TransactionsTable";
 import { Status } from "../../components/TransactionsTable/Status";
-import { getUser } from "../../usuario";
+import { CardResumo, CardResumoProps } from "./CardResumo";
 import * as Styled from "./DespesasCompartilhadas.styles";
 
 const tableColumns = [
@@ -94,50 +94,53 @@ const parseDespesasCompartilhadas = (
         )?.nome || "Não encontrado",
     }));
 
-export const DespesasCompartilhadas = () => {
-  // const dadosCard = [
-  //   {
-  //     title: "Despesas Patricia",
-  //     pendentes: 450,
-  //     pagas: 715,
-  //     total: 1165,
-  //   },
-  //   {
-  //     title: "Despesas Gabriel",
-  //     pendentes: 450,
-  //     pagas: 715,
-  //     total: 1165,
-  //   },
-  //   {
-  //     title: "Total de despesas",
-  //     pendentes: 450,
-  //     pagas: 715,
-  //     total: 1165,
-  //   },
-  // ];
+const parseResumoDespesas = (
+  despesasPorUsuarios: { despesas: Despesa[]; usuario: Usuario }[]
+) =>
+  despesasPorUsuarios.map(({ usuario, despesas }) => ({
+    title: `Despesas ${usuario.nome}`,
+    pendentes: despesas
+      .filter((despesa) => despesa.status === `0`)
+      .reduce((valorTotal, despesa) => valorTotal + despesa.valor, 0),
+    pagas: despesas
+      .filter((despesa) => despesa.status === `1`)
+      .reduce((valorTotal, despesa) => valorTotal + despesa.valor, 0),
+    total: despesas.reduce(
+      (valorTotal, despesa) => valorTotal + despesa.valor,
+      0
+    ),
+  }));
 
-  const usuario = getUser();
+export const DespesasCompartilhadas = () => {
   const [despesasCompartilhadas, setDespesasCompartilhadas] = useState<
     TransacaoView[]
   >([]);
+  const [resumoDespesas, setResumoDespesas] = useState<CardResumoProps[]>([]);
 
   useEffect(() => {
-    if (usuario) {
-      Promise.all([
-        getDespesas(usuario.idusuario),
-        getCategorias(),
-        getUsuarios(),
-      ]).then(([respostaDespesas, respostaCategorias, usuarios]) => {
-        setDespesasCompartilhadas(
-          parseDespesasCompartilhadas(
-            respostaDespesas,
-            respostaCategorias,
-            usuarios
-          )
-        );
-      });
-    }
-  }, [usuario]);
+    getUsuarios().then(async (usuarios) => {
+      const respostaCategorias = await getCategorias();
+      const respostaDespesasUsuarios = await Promise.all(
+        usuarios.map(({ idusuario }) => getDespesas(idusuario))
+      );
+      const despesasDeTodosUsuarios = respostaDespesasUsuarios.flat();
+
+      setDespesasCompartilhadas(
+        parseDespesasCompartilhadas(
+          despesasDeTodosUsuarios,
+          respostaCategorias,
+          usuarios
+        )
+      );
+
+      const despesasPorUsuarios = usuarios.map((usuario, index) => ({
+        usuario,
+        despesas: respostaDespesasUsuarios[index],
+      }));
+
+      setResumoDespesas(parseResumoDespesas(despesasPorUsuarios));
+    });
+  }, []);
 
   return (
     <Layout>
@@ -146,7 +149,11 @@ export const DespesasCompartilhadas = () => {
         <FilterTransacao />
         <FilterMes />
       </Styled.Container>
-      {/* <CardSaldo dados={dadosCard} /> */}
+      <Grid container spacing={2}>
+        {resumoDespesas.map((resumo) => (
+          <CardResumo {...resumo} key={resumo.title} />
+        ))}
+      </Grid>
       <TransactionsTable
         tableColumns={tableColumns}
         tableRows={despesasCompartilhadas}

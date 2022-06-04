@@ -5,7 +5,8 @@ import { Card } from "../../../components/Card";
 const Dash = styled.div`
   height: 50%;
   margin-inline: 8px;
-  border-bottom: 1px dashed ${({ theme }) => theme.palette.complementaryBlack.main};
+  border-bottom: 1px dashed
+    ${({ theme }) => theme.palette.complementaryBlack.main};
 `;
 
 const Registro = ({
@@ -51,7 +52,7 @@ export const ContasECartoes = () => (
     <Box mt={2}>
       <Grid container spacing={1} marginTop={2}>
         {["Nubank", "Inter", "Picpay"].map((cartao) => (
-          <Grid item>
+          <Grid item key={cartao}>
             <Typography variant='bold' color='primary'>
               {cartao}
             </Typography>

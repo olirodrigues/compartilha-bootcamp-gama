@@ -1,6 +1,6 @@
 import "@emotion/react";
 
-import { Theme } from "./assets/styles/Global";
+import { Theme } from "../assets/styles/Global";
 
 declare type CustomTheme = typeof Theme;
 

@@ -38,6 +38,10 @@ export interface Despesa extends Transacao {
   tipo: "despesa";
 }
 
+export interface Receita extends Transacao {
+  tipo: "receita";
+}
+
 export interface Categoria {
   idcategoria: number;
   descricao: string;

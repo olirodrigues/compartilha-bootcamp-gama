@@ -99,7 +99,7 @@ const parseReceitas = (
   categorias: Categoria[]
 ): TransacaoView[] =>
   receitas.map((receita) => ({
-    id: receita.idcarteira,
+    id: receita.idcarteira || 0,
     status: receita.status,
     data: receita.data,
     descricao: receita.descricao,

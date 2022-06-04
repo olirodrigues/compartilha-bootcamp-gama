@@ -22,7 +22,7 @@ export interface Saldo {
 }
 
 export interface Transacao {
-  idcarteira: number;
+  idcarteira?: number;
   descricao: string;
   valor: number;
   data: string;
@@ -31,7 +31,7 @@ export interface Transacao {
   compartilha: number;
   idusuario: number;
   status: string;
-  idusuario_compartilha: number;
+  idusuario_compartilha?: number;
 }
 
 export interface Despesa extends Transacao {

@@ -79,7 +79,7 @@ const parseDespesasCompartilhadas = (
   despesas
     .filter((despesa) => despesa.compartilha === 1)
     .map((despesa) => ({
-      id: despesa.idcarteira,
+      id: despesa.idcarteira || 0,
       status: despesa.status,
       data: despesa.data,
       descricao: despesa.descricao,

@@ -36,7 +36,7 @@ const Registro = ({
 );
 
 export const ContasECartoes = () => (
-  <Card>
+  <Card sx={{ height: "100%" }}>
     <Typography variant='subtitle3' color='primary' gutterBottom>
       Contas e cartões sincronizados
     </Typography>
@@ -50,7 +50,7 @@ export const ContasECartoes = () => (
     </Typography>
 
     <Box mt={2}>
-      <Grid container spacing={1} marginTop={2}>
+      <Grid container spacing={2} marginTop={2}>
         {["Nubank", "Inter", "Picpay"].map((cartao) => (
           <Grid item key={cartao}>
             <Typography variant='bold' color='primary'>
@@ -61,7 +61,7 @@ export const ContasECartoes = () => (
       </Grid>
     </Box>
 
-    <Button variant='contained' color='complementaryBlue'>
+    <Button sx={{ marginTop: "15px" }} variant='borderBlue'>
       Sincronizar contas e cartões
     </Button>
   </Card>

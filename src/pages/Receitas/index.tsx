@@ -79,7 +79,7 @@ export const Receitas = () => {
 
   const tableRows = [
     {
-      id: "1",
+      id: 1,
       status: "Paga",
       data: "22/05/2020",
       descricao: "1 Receita do dia",
@@ -88,7 +88,7 @@ export const Receitas = () => {
       teste: "asa",
     },
     {
-      id: "2",
+      id: 2,
       status: "Paga",
       data: "22/05/2020",
       descricao: "2 Receita do dia",
@@ -97,7 +97,7 @@ export const Receitas = () => {
       teste: "asa",
     },
     {
-      id: "3",
+      id: 3,
       status: "Paga",
       data: "22/05/2020",
       descricao: "3 Receita do dia",
@@ -106,7 +106,7 @@ export const Receitas = () => {
       teste: "asa",
     },
     {
-      id: "4",
+      id: 4,
       status: "Paga",
       data: "22/05/2020",
       descricao: "4 Receita do dia",
@@ -115,7 +115,7 @@ export const Receitas = () => {
       teste: "asa",
     },
     {
-      id: "5",
+      id: 5,
       status: "Paga",
       data: "22/05/2020",
       descricao: "5 Receita do dia",
@@ -124,7 +124,7 @@ export const Receitas = () => {
       teste: "asa",
     },
     {
-      id: "6",
+      id: 6,
       status: "Paga",
       data: "22/05/2020",
       descricao: "6 Receita do dia",
@@ -133,7 +133,7 @@ export const Receitas = () => {
       teste: "asa",
     },
     {
-      id: "7",
+      id: 7,
       status: "Paga",
       data: "22/05/2020",
       descricao: "7 Receita do dia",
@@ -142,7 +142,7 @@ export const Receitas = () => {
       teste: "asa",
     },
     {
-      id: "8",
+      id: 8,
       status: "Paga",
       data: "22/05/2020",
       descricao: "8 Receita do dia",
@@ -151,7 +151,7 @@ export const Receitas = () => {
       teste: "asa",
     },
     {
-      id: "9",
+      id: 9,
       status: "Paga",
       data: "22/05/2020",
       descricao: "9 Receita do dia",
@@ -160,7 +160,7 @@ export const Receitas = () => {
       teste: "asa",
     },
     {
-      id: "10",
+      id: 10,
       status: "Paga",
       data: "22/05/2020",
       descricao: "10 Receita do dia",
@@ -169,7 +169,7 @@ export const Receitas = () => {
       teste: "asa",
     },
     {
-      id: "11",
+      id: 11,
       status: "Paga",
       data: "22/05/2020",
       descricao: "11 Receita do dia",
@@ -178,7 +178,7 @@ export const Receitas = () => {
       teste: "asa",
     },
     {
-      id: "12",
+      id: 12,
       status: "Paga",
       data: "22/05/2020",
       descricao: "12 Receita do dia",
@@ -187,7 +187,7 @@ export const Receitas = () => {
       teste: "asa",
     },
     {
-      id: "13",
+      id: 13,
       status: "Pendente",
       data: "22/05/2020",
       descricao: "Receita do noite",

@@ -1,4 +1,6 @@
+import { Box } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
+import { useEffect, useState } from "react";
 import {
   MdOutlineGroups,
   MdOutlineCalculate,
@@ -6,15 +8,23 @@ import {
   MdPriceCheck,
   MdModeEdit,
   MdOutlineDeleteOutline,
+  MdCheckCircleOutline,
 } from "react-icons/md";
+import { Categoria, Despesa } from "../../@types/api";
+import { getDespesas } from "../../api/carteira";
+import { getCategorias } from "../../api/categoria";
 
 import { Cabecalho } from "../../components/Cabecalho";
-import { CardSaldo, parseSaldos } from "../../components/CardSaldo";
+import { CardSaldo, parseSaldos, SaldoDado } from "../../components/CardSaldo";
 import { FilterMes } from "../../components/FilterMes";
 import { FilterTransacao } from "../../components/FilterTransacao";
 import { Layout } from "../../components/Layout";
 import { NovaDespesa } from "../../components/Modal/NovaDespesa";
-import { TransactionsTable } from "../../components/TransactionsTable";
+import {
+  TransacaoView,
+  TransactionsTable,
+} from "../../components/TransactionsTable";
+import { getUser } from "../../usuario";
 import * as Styled from "./Despesas.styles";
 
 const iconeDespesas = {
@@ -43,166 +53,127 @@ const saldosPadrao = parseSaldos(iconeDespesas, [
   },
 ]);
 
-export function Despesas() {
-  const tableColumns = [
-    {
-      field: "status",
-      headerName: "Status",
-      width: 144,
-    },
-    {
-      field: "data",
-      headerName: "Data",
-      width: 151,
-    },
-    {
-      field: "descricao",
-      headerName: "Descrição",
-      width: 204,
-    },
-    {
-      field: "categoria",
-      headerName: "Categoria",
-      width: 157,
-    },
-    {
-      field: "valor",
-      headerName: "Valor",
-      width: 153,
-    },
-
-    {
-      field: "",
-      headerName: "",
-      width: 131,
-      renderCell: (params: GridRenderCellParams) => (
-        <>
-          <MdModeEdit size={18} />
-          <MdOutlineDeleteOutline size={18} />
-        </>
+const tableColumns = [
+  {
+    field: "status",
+    headerName: "Status",
+    width: 144,
+    renderCell: (params: GridRenderCellParams) =>
+      params.value === "1" ? (
+        <Box color='success.main' display='flex' justifyContent='center'>
+          <MdCheckCircleOutline size={21} />
+          &nbsp;Pago
+        </Box>
+      ) : (
+        <Box color='error.main' display='flex' justifyContent='center'>
+          <MdRemoveCircleOutline size={21} />
+          &nbsp;Pendente
+        </Box>
       ),
-    },
-  ];
+  },
+  {
+    field: "data",
+    headerName: "Data",
+    width: 151,
+  },
+  {
+    field: "descricao",
+    headerName: "Descrição",
+    width: 204,
+  },
+  {
+    field: "categoria",
+    headerName: "Categoria",
+    width: 157,
+  },
+  {
+    field: "valor",
+    headerName: "Valor",
+    width: 153,
+    renderCell: (params: GridRenderCellParams) => <>R$ {params.value}</>,
+  },
 
-  const tableRows = [
-    {
-      id: "1",
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "1 Gasto do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: "2",
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "2 Gasto do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: "3",
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "3 Gasto do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: "4",
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "4 Gasto do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: "5",
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "5 Gasto do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: "6",
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "6 Gasto do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: "7",
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "7 Gasto do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: "8",
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "8 Gasto do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: "9",
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "9 Gasto do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: "10",
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "10 Gasto do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: "11",
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "11 Gasto do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: "12",
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "12 Gasto do dia",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: "13",
-      status: "Pendente",
-      data: "22/05/2020",
-      descricao: "Gasto do noite",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-  ];
+  {
+    field: "",
+    headerName: "",
+    width: 131,
+    renderCell: (params: GridRenderCellParams) => (
+      <>
+        <MdModeEdit size={18} />
+        <MdOutlineDeleteOutline size={18} />
+      </>
+    ),
+  },
+];
+
+const parseDespesas = (
+  despesas: Despesa[],
+  categorias: Categoria[]
+): TransacaoView[] =>
+  despesas.map((despesa) => ({
+    id: despesa.idcarteira,
+    status: despesa.status,
+    data: despesa.data,
+    descricao: despesa.descricao,
+    categoria:
+      categorias.find(
+        ({ idcategoria }) => despesa.categoria_idcategoria === idcategoria
+      )?.descricao || "Não encontrada",
+    valor: despesa.valor,
+  }));
+
+export function Despesas() {
+  const usuario = getUser();
+  const [despesas, setDespesas] = useState<TransacaoView[]>([]);
+  const [saldos, setSaldos] = useState<SaldoDado[]>(saldosPadrao);
+
+  useEffect(() => {
+    if (usuario) {
+      Promise.all([getDespesas(usuario.idusuario), getCategorias()]).then(
+        ([respostaDespesas, respostaCategorias]) => {
+          setDespesas(parseDespesas(respostaDespesas, respostaCategorias));
+          setSaldos(
+            parseSaldos(iconeDespesas, [
+              {
+                descricao: "Despesas pendentes",
+                valor: respostaDespesas
+                  .filter((despesa) => despesa.status === `0`)
+                  .reduce(
+                    (valorPendente, despesa) => valorPendente + despesa.valor,
+                    0
+                  ),
+              },
+              {
+                descricao: "Despesas pagas",
+                valor: respostaDespesas
+                  .filter((despesa) => despesa.status === `1`)
+                  .reduce(
+                    (valorPendente, despesa) => valorPendente + despesa.valor,
+                    0
+                  ),
+              },
+              {
+                descricao: "Despesas compartilhadas",
+                valor: respostaDespesas
+                  .filter((despesa) => despesa.compartilha === 1)
+                  .reduce(
+                    (valorPendente, despesa) => valorPendente + despesa.valor,
+                    0
+                  ),
+              },
+              {
+                descricao: "Total",
+                valor: respostaDespesas.reduce(
+                  (valorPendente, despesa) => valorPendente + despesa.valor,
+                  0
+                ),
+              },
+            ])
+          );
+        }
+      );
+    }
+  }, [usuario]);
 
   return (
     <Layout>
@@ -214,8 +185,8 @@ export function Despesas() {
         </Styled.ContainerActions>
         <FilterMes />
       </Styled.Container>
-      <CardSaldo dados={saldosPadrao} />
-      <TransactionsTable tableColumns={tableColumns} tableRows={tableRows} />
+      <CardSaldo dados={saldos} />
+      <TransactionsTable tableColumns={tableColumns} tableRows={despesas} />
     </Layout>
   );
 }

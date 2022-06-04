@@ -77,7 +77,7 @@ export const DespesasCompartilhadas = () => {
 
   const tableRows = [
     {
-      id: "1",
+      id: 1,
       status: "Paga",
       data: "22/05/2020",
       descricao: "1 Gasto do dia",
@@ -87,7 +87,7 @@ export const DespesasCompartilhadas = () => {
       teste: "asa",
     },
     {
-      id: "2",
+      id: 2,
       status: "Paga",
       data: "22/05/2020",
       descricao: "2 Gasto do dia",
@@ -97,7 +97,7 @@ export const DespesasCompartilhadas = () => {
       teste: "asa",
     },
     {
-      id: "3",
+      id: 3,
       status: "Paga",
       data: "22/05/2020",
       descricao: "3 Gasto do dia",
@@ -107,7 +107,7 @@ export const DespesasCompartilhadas = () => {
       teste: "asa",
     },
     {
-      id: "4",
+      id: 4,
       status: "Paga",
       data: "22/05/2020",
       descricao: "4 Gasto do dia",
@@ -117,7 +117,7 @@ export const DespesasCompartilhadas = () => {
       teste: "asa",
     },
     {
-      id: "5",
+      id: 5,
       status: "Paga",
       data: "22/05/2020",
       descricao: "5 Gasto do dia",
@@ -127,7 +127,7 @@ export const DespesasCompartilhadas = () => {
       teste: "asa",
     },
     {
-      id: "6",
+      id: 6,
       status: "Paga",
       data: "22/05/2020",
       descricao: "6 Gasto do dia",
@@ -137,7 +137,7 @@ export const DespesasCompartilhadas = () => {
       teste: "asa",
     },
     {
-      id: "7",
+      id: 7,
       status: "Paga",
       data: "22/05/2020",
       descricao: "7 Gasto do dia",
@@ -147,7 +147,7 @@ export const DespesasCompartilhadas = () => {
       teste: "asa",
     },
     {
-      id: "8",
+      id: 8,
       status: "Paga",
       data: "22/05/2020",
       descricao: "8 Gasto do dia",
@@ -157,7 +157,7 @@ export const DespesasCompartilhadas = () => {
       teste: "asa",
     },
     {
-      id: "9",
+      id: 9,
       status: "Paga",
       data: "22/05/2020",
       descricao: "9 Gasto do dia",
@@ -167,7 +167,7 @@ export const DespesasCompartilhadas = () => {
       teste: "asa",
     },
     {
-      id: "10",
+      id: 10,
       status: "Paga",
       data: "22/05/2020",
       descricao: "10 Gasto do dia",
@@ -177,7 +177,7 @@ export const DespesasCompartilhadas = () => {
       teste: "asa",
     },
     {
-      id: "11",
+      id: 11,
       status: "Paga",
       data: "22/05/2020",
       descricao: "11 Gasto do dia",
@@ -187,7 +187,7 @@ export const DespesasCompartilhadas = () => {
       teste: "asa",
     },
     {
-      id: "12",
+      id: 12,
       status: "Paga",
       data: "22/05/2020",
       descricao: "12 Gasto do dia",
@@ -197,7 +197,7 @@ export const DespesasCompartilhadas = () => {
       teste: "asa",
     },
     {
-      id: "13",
+      id: 13,
       status: "Pendente",
       data: "22/05/2020",
       descricao: "Gasto do noite",

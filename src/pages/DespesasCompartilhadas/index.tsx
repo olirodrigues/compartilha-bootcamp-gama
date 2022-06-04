@@ -1,12 +1,98 @@
+import { Grid } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
+import { useEffect, useState } from "react";
 import { MdModeEdit, MdOutlineDeleteOutline } from "react-icons/md";
+
+import { Categoria, Despesa, Usuario } from "../../@types/api";
+import { getDespesas } from "../../api/carteira";
+import { getCategorias } from "../../api/categoria";
+import { getUsuarios } from "../../api/usuario";
 import { Cabecalho } from "../../components/Cabecalho";
-import { CardSaldo } from "../../components/CardSaldo";
 import { FilterMes } from "../../components/FilterMes";
 import { FilterTransacao } from "../../components/FilterTransacao";
 import { Layout } from "../../components/Layout";
-import { TransactionsTable } from "../../components/TransactionsTable";
+import {
+  TransacaoView,
+  TransactionsTable,
+} from "../../components/TransactionsTable";
+import { Status } from "../../components/TransactionsTable/Status";
+import { getUser } from "../../usuario";
 import * as Styled from "./DespesasCompartilhadas.styles";
+
+const tableColumns = [
+  {
+    field: "status",
+    headerName: "Status",
+    width: 135,
+    renderCell: (params: GridRenderCellParams) => (
+      <Status value={params.value} />
+    ),
+  },
+  {
+    field: "data",
+    headerName: "Data",
+    width: 123,
+  },
+  {
+    field: "descricao",
+    headerName: "Descrição",
+    flex: 1,
+  },
+  {
+    field: "responsavel",
+    headerName: "Responsável",
+    flex: 1,
+  },
+  {
+    field: "categoria",
+    headerName: "Categoria",
+    width: 190,
+  },
+  {
+    field: "valor",
+    headerName: "Valor",
+    width: 120,
+    renderCell: (params: GridRenderCellParams) => <>R$ {params.value}</>,
+  },
+  {
+    field: "options",
+    headerName: "",
+    width: 131,
+    renderCell: (params: GridRenderCellParams) => (
+      <Grid container justifyContent='end' width='80px'>
+        <Grid item xs>
+          <MdModeEdit size={18} />
+        </Grid>
+        <Grid item xs>
+          <MdOutlineDeleteOutline size={18} />
+        </Grid>
+      </Grid>
+    ),
+  },
+];
+
+const parseDespesasCompartilhadas = (
+  despesas: Despesa[],
+  categorias: Categoria[],
+  usuarios: Usuario[]
+): TransacaoView[] =>
+  despesas
+    .filter((despesa) => despesa.compartilha === 1)
+    .map((despesa) => ({
+      id: despesa.idcarteira,
+      status: despesa.status,
+      data: despesa.data,
+      descricao: despesa.descricao,
+      categoria:
+        categorias.find(
+          ({ idcategoria }) => despesa.categoria_idcategoria === idcategoria
+        )?.descricao || "Não encontrada",
+      valor: despesa.valor,
+      responsavel:
+        usuarios.find(
+          (usuario) => despesa.idusuario_compartilha === usuario.idusuario
+        )?.nome || "Não encontrado",
+    }));
 
 export const DespesasCompartilhadas = () => {
   // const dadosCard = [
@@ -30,193 +116,41 @@ export const DespesasCompartilhadas = () => {
   //   },
   // ];
 
-  const tableColumns = [
-    {
-      field: "status",
-      headerName: "Status",
-      width: 135,
-    },
-    {
-      field: "data",
-      headerName: "Data",
-      width: 123,
-    },
-    {
-      field: "descricao",
-      headerName: "Descrição",
-      width: 165,
-    },
-    {
-      field: "responsavel",
-      headerName: "Responsável",
-      width: 151,
-    },
-    {
-      field: "categoria",
-      headerName: "Categoria",
-      width: 190,
-    },
-    {
-      field: "valor",
-      headerName: "Valor",
-      width: 116,
-    },
+  const usuario = getUser();
+  const [despesasCompartilhadas, setDespesasCompartilhadas] = useState<
+    TransacaoView[]
+  >([]);
 
-    {
-      field: "",
-      headerName: "",
-      width: 60,
-      renderCell: (params: GridRenderCellParams) => (
-        <>
-          <MdModeEdit size={18} />
-          <MdOutlineDeleteOutline size={18} />
-        </>
-      ),
-    },
-  ];
-
-  const tableRows = [
-    {
-      id: 1,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "1 Gasto do dia",
-      responsavel: "Patricia Santos",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 2,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "2 Gasto do dia",
-      responsavel: "Patricia Santos",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 3,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "3 Gasto do dia",
-      responsavel: "Patricia Santos",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 4,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "4 Gasto do dia",
-      responsavel: "Patricia Santos",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 5,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "5 Gasto do dia",
-      responsavel: "Patricia Santos",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 6,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "6 Gasto do dia",
-      responsavel: "Patricia Santos",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 7,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "7 Gasto do dia",
-      responsavel: "Patricia Santos",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 8,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "8 Gasto do dia",
-      responsavel: "Patricia Santos",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 9,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "9 Gasto do dia",
-      responsavel: "Patricia Santos",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 10,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "10 Gasto do dia",
-      responsavel: "Patricia Santos",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 11,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "11 Gasto do dia",
-      responsavel: "Patricia Santos",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 12,
-      status: "Paga",
-      data: "22/05/2020",
-      descricao: "12 Gasto do dia",
-      responsavel: "Patricia Santos",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-    {
-      id: 13,
-      status: "Pendente",
-      data: "22/05/2020",
-      descricao: "Gasto do noite",
-      responsavel: "Patricia Santos",
-      categoria: "Lazer",
-      valor: 22.3,
-      teste: "asa",
-    },
-  ];
+  useEffect(() => {
+    if (usuario) {
+      Promise.all([
+        getDespesas(usuario.idusuario),
+        getCategorias(),
+        getUsuarios(),
+      ]).then(([respostaDespesas, respostaCategorias, usuarios]) => {
+        setDespesasCompartilhadas(
+          parseDespesasCompartilhadas(
+            respostaDespesas,
+            respostaCategorias,
+            usuarios
+          )
+        );
+      });
+    }
+  }, [usuario]);
 
   return (
     <Layout>
-      <Cabecalho title='Despesas' name='OR' />
+      <Cabecalho title='Despesas compartilhadas' name='OR' />
       <Styled.Container>
         <FilterTransacao />
         <FilterMes />
       </Styled.Container>
       {/* <CardSaldo dados={dadosCard} /> */}
-      <TransactionsTable tableColumns={tableColumns} tableRows={tableRows} />
+      <TransactionsTable
+        tableColumns={tableColumns}
+        tableRows={despesasCompartilhadas}
+      />
     </Layout>
   );
 };

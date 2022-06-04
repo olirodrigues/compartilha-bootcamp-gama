@@ -7,3 +7,6 @@ export const getUsuario = async (id: number): Promise<Usuario | undefined> =>
     // A API retorna um array com os usuarios. Temporariamente, estamos pegando o usuario
     // que o Id seja igual o passado.
     .then((usuarios) => usuarios.find((u) => u.idusuario === id));
+
+export const getUsuarios = async (): Promise<Usuario[]> =>
+  fetch(buildURL(`/usuario`)).then((res) => res.json());

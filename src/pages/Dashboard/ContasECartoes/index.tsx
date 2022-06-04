@@ -36,7 +36,7 @@ const Registro = ({
 );
 
 export const ContasECartoes = () => (
-  <Card>
+  <Card sx={{ height: "100%" }}>
     <Typography variant='subtitle3' color='primary' gutterBottom>
       Contas e cartões sincronizados
     </Typography>

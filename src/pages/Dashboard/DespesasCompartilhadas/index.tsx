@@ -37,15 +37,24 @@ export const DespesasCompartilhadas = () => (
     sx={{
       display: "flex",
       flexDirection: "column",
+      justifyContent: "space-between",
       gap: "30px",
       height: "100%",
     }}
   >
-    <Typography variant='subtitle3' color='primary' gutterBottom>
-      Despesas compartilhadas
-    </Typography>
-    <UsuarioCompartilhado src={Usuario1} name='Patricia' valor='1165,00' />
-    <UsuarioCompartilhado src={Usuario2} name='Gabriel' valor='1135,00' />
+    <Box
+      sx={{
+        flexDirection: "column",
+        display: "flex",
+        gap: "30px",
+      }}
+    >
+      <Typography variant='subtitle3' color='primary' gutterBottom>
+        Despesas compartilhadas
+      </Typography>
+      <UsuarioCompartilhado src={Usuario1} name='Patricia' valor='1165,00' />
+      <UsuarioCompartilhado src={Usuario2} name='Gabriel' valor='1135,00' />
+    </Box>
 
     <Box
       sx={{

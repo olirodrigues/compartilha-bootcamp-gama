@@ -1,7 +1,6 @@
 import { css } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import type {} from "@mui/lab/themeAugmentation";
-import { flexbox } from "@mui/system";
 
 export const GlobalStyles = css`
   * {
@@ -10,7 +9,9 @@ export const GlobalStyles = css`
     margin: 0;
     box-sizing: border-box;
   }
-
+  #root {
+    height: 100vh;
+  }
   a {
     text-decoration: none;
   }
@@ -66,6 +67,7 @@ declare module "@mui/material/Button" {
   interface ButtonPropsVariantOverrides {
     borderPrimary: true;
     borderSecondary: true;
+    borderGoogle: true;
   }
 }
 
@@ -195,6 +197,19 @@ export const Theme = createTheme(theme, {
             color: theme.palette.getContrastText(theme.palette.secondary.main),
             "&:hover": {
               backgroundColor: theme.palette.secondary.dark,
+            },
+          },
+        },
+        {
+          props: { variant: "borderGoogle" },
+          style: {
+            height: "45px",
+            borderRadius: "20px",
+            paddingInline: "36px",
+            backgroundColor: theme.palette.complementaryWhite.main,
+            color: theme.palette.getContrastText(theme.palette.complementaryWhite.main),
+            "&:hover": {
+              backgroundColor: theme.palette.complementaryWhite.dark,
             },
           },
         },

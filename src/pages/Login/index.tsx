@@ -20,7 +20,12 @@ export function Login() {
         <Link to='/'>
           <img className='logo' src={Logo} alt='' />
         </Link>
-        <Typography variant='h3' component='h1' color='complementaryBlack' sx={{ fontWeight: 700 }}>
+        <Typography
+          variant='h3'
+          component='h1'
+          color='complementaryBlack'
+          sx={{ fontWeight: 700 }}
+        >
           Acessar conta
         </Typography>
         <Styled.LoginGoogle>
@@ -30,8 +35,12 @@ export function Login() {
         </Styled.LoginGoogle>
         <Divider sx={{ width: "100%" }}>ou</Divider>
         <Styled.FormContainer>
-          <TextField variant='outlined'></TextField>
-          <TextField variant='outlined'></TextField>
+          <TextField variant='outlined' label='E-mail'></TextField>
+          <TextField
+            variant='outlined'
+            label='Senha'
+            type='password'
+          ></TextField>
           <Link to='/dashboard'>
             <Button variant='borderSecondary' fullWidth>
               Entrar
@@ -40,7 +49,8 @@ export function Login() {
         </Styled.FormContainer>
         <Link to='/cadastro'>
           <Typography variant='body1' align='center'>
-            Não tenho uma conta. <Typography variant='bold'>Cadastrar</Typography>
+            Não tenho uma conta.{" "}
+            <Typography variant='bold'>Cadastrar</Typography>
           </Typography>
         </Link>
         <a href='/login'>

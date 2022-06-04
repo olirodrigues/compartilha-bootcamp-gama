@@ -4,45 +4,107 @@ import {
   Dialog,
   DialogActions,
   DialogContentText,
-  DialogTitle,
-  FormControl,
   FormControlLabel,
-  FormHelperText,
   InputAdornment,
-  InputLabel,
-  OutlinedInput,
   Switch,
   TextField,
 } from "@mui/material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import ptBrLocale from "date-fns/locale/pt-BR";
-import { useState } from "react";
-import { MdAdd, MdClose, MdHomeWork, MdOutlineNote, MdOutlineSearch } from "react-icons/md";
+import React, { EventHandler, useEffect, useState } from "react";
+import { MdAdd, MdClose, MdOutlineNote } from "react-icons/md";
 import { RiPercentLine } from "react-icons/ri";
 
 import * as Styled from "./NovaDespesa.style";
+import { Despesa } from "../../../@types/api";
+import { getUser } from "../../../usuario";
+import { addDespesa } from "../../../api/carteira";
+import { getCategorias } from "../../../api/categoria";
+import { getUsuarios } from "../../../api/usuario";
+
+const novaReceita: Despesa = {
+  descricao: "",
+  valor: 0,
+  data: "",
+  tipo: "despesa",
+  categoria_idcategoria: 0,
+  compartilha: 0,
+  idusuario: 0,
+  status: "0",
+};
 
 export function NovaDespesa() {
+  const usuario = getUser();
   const [open, setOpen] = useState(false);
-  const [month, setMonth] = useState<Date | null>(null);
+  const [despesa, setDespesa] = useState<Despesa>({ ...novaReceita });
+  const [date, setDate] = useState<Date | null>(null);
+  const [compartilhamentoPercent, setCompartilhamentoPercent] = useState(0);
+  const [categorias, setCategorias] = useState<{ label: string; id: number }[]>(
+    []
+  );
+  const [usuarios, setUsuarios] = useState<{ label: string; id: number }[]>([]);
+
+  useEffect(() => {
+    if (usuario) {
+      setDespesa({ ...despesa, idusuario: usuario.idusuario });
+
+      getUsuarios().then((respostaUsuarios) => {
+        setUsuarios(
+          respostaUsuarios
+            .filter((user) => user.idusuario !== usuario.idusuario)
+            .map((usuario) => ({
+              id: usuario.idusuario,
+              label: usuario.email,
+            }))
+        );
+      });
+    }
+
+    getCategorias().then((respostaCategorias) => {
+      setCategorias(
+        respostaCategorias.map((categoria) => ({
+          id: categoria.idcategoria,
+          label: categoria.descricao,
+        }))
+      );
+    });
+  }, [usuario]);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
+    setDespesa({ ...novaReceita });
     setOpen(false);
   };
 
-  const CategoriasDespesas = [
-    { icon: <MdHomeWork />, label: "Moradia" },
-    { icon: <MdHomeWork />, label: "Moradia" },
-    { icon: <MdHomeWork />, label: "Moradia" },
-    { icon: <MdHomeWork />, label: "Moradia" },
-    { icon: <MdHomeWork />, label: "Moradia" },
-    { icon: <MdHomeWork />, label: "Moradia" },
-  ];
+  const handleSubmit = (e: React.SyntheticEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    // valor, data, descricao, categoria_idcategoria, tipo, idusuario, status, idusuario_compartilha
+    if (usuario) {
+      // Caso a despesa seja compartilhada, vamos criar duas despesas, 1 pra cada usuario
+      if (despesa.compartilha === 1 && despesa.idusuario_compartilha) {
+        Promise.all([
+          // Adiciona despesa para o usuario logado
+          addDespesa({
+            ...despesa,
+            valor: despesa.valor * (1 - compartilhamentoPercent / 100),
+          }),
+          // Adiciona despesa para o usuario selecionado
+          addDespesa({
+            ...despesa,
+            valor: despesa.valor * (compartilhamentoPercent / 100),
+            idusuario: despesa.idusuario_compartilha,
+            idusuario_compartilha: usuario.idusuario,
+          }),
+        ]).then(() => {
+          handleClose();
+        });
+      }
+    }
+  };
 
   return (
     <>
@@ -62,36 +124,64 @@ export function NovaDespesa() {
           </Styled.CloseButton>
         </Styled.Titulo>
         <DialogContentText
-          sx={{ m: 0, p: 2, display: "flex", flexDirection: "column", gap: 3, color: "secondary" }}
+          sx={{
+            m: 0,
+            p: 2,
+            display: "flex",
+            flexDirection: "column",
+            gap: 3,
+            color: "secondary",
+          }}
         >
           {/* valor */}
           <TextField
             color='secondary'
             label='Valor'
+            type='number'
+            onChange={(e) =>
+              setDespesa({ ...despesa, valor: parseInt(e.target.value) })
+            }
             InputProps={{
-              startAdornment: <InputAdornment position='start'>R$</InputAdornment>,
+              startAdornment: (
+                <InputAdornment position='start'>R$</InputAdornment>
+              ),
             }}
           />
           <Styled.TwoColumn>
             {/* Switch Pago */}
             <FormControlLabel
               value='start'
-              control={<Switch color='secondary' />}
+              control={
+                <Switch
+                  color='secondary'
+                  onChange={(_, checked) =>
+                    setDespesa({ ...despesa, status: checked ? "1" : "0" })
+                  }
+                />
+              }
               label='Pago'
               labelPlacement='start'
             />
             {/* date */}
-            <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ptBrLocale}>
+            <LocalizationProvider
+              dateAdapter={AdapterDateFns}
+              adapterLocale={ptBrLocale}
+            >
               <DatePicker
                 views={["day"]}
                 label='Data'
-                value={month}
+                value={date}
                 minDate={new Date("2020-03-01")}
                 maxDate={new Date("2029-06-01")}
-                onChange={(newMonth) => {
-                  setMonth(newMonth);
+                onChange={(newDate) => {
+                  if (newDate) {
+                    setDate(newDate);
+                    setDespesa({ ...despesa, data: newDate.toISOString() });
+                  }
                 }}
-                renderInput={(params) => <TextField fullWidth color='secondary' {...params} />}
+                renderInput={(params) => (
+                  <TextField fullWidth color='secondary' {...params} />
+                )}
               />
             </LocalizationProvider>
           </Styled.TwoColumn>
@@ -106,31 +196,55 @@ export function NovaDespesa() {
                 </InputAdornment>
               ),
             }}
+            onChange={(e) =>
+              setDespesa({ ...despesa, descricao: e.target.value })
+            }
           />
           <FormControlLabel
             value='end'
-            control={<Switch color='secondary' />}
+            control={
+              <Switch
+                color='secondary'
+                onChange={(e, checked) =>
+                  setDespesa({ ...despesa, compartilha: checked ? 1 : 0 })
+                }
+              />
+            }
             label='Compartilhar conta'
             labelPlacement='end'
           />
           <Styled.TwoColumn>
-            {/* email */}
-            <TextField
+            {/* email usuario compartilhado */}
+            <Autocomplete
               fullWidth
-              label='Email do usuário para compartilhar'
-              color='secondary'
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position='start'>
-                    <MdOutlineSearch size={24} />
-                  </InputAdornment>
-                ),
-              }}
+              disablePortal
+              options={usuarios}
+              disabled={despesa.compartilha === 0}
+              onChange={(_, usuario) =>
+                usuario &&
+                setDespesa({ ...despesa, idusuario_compartilha: usuario.id })
+              }
+              renderInput={(params) => (
+                <TextField
+                  color='secondary'
+                  {...params}
+                  label='Email do usuário para compartilhar'
+                  // InputProps={{
+                  //   endAdornment: (
+                  //     <InputAdornment position='start'>
+                  //       <MdOutlineSearch size={24} />
+                  //     </InputAdornment>
+                  //   ),
+                  // }}
+                />
+              )}
             />
             {/* porcentagem */}
             <TextField
               sx={{ width: "15ch" }}
               color='secondary'
+              type='number'
+              disabled={despesa.compartilha === 0}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position='start'>
@@ -138,21 +252,31 @@ export function NovaDespesa() {
                   </InputAdornment>
                 ),
               }}
+              value={compartilhamentoPercent}
+              onChange={(e) =>
+                setCompartilhamentoPercent(parseInt(e.target.value || "0"))
+              }
             />
           </Styled.TwoColumn>
           {/* categorias */}
           <Autocomplete
             disablePortal
-            id='combo-box-demo'
             sx={{ width: "100%" }}
-            options={CategoriasDespesas}
-            renderInput={(params) => <TextField color='secondary' {...params} label='Categoria' />}
+            options={categorias}
+            onChange={(_, categoria) =>
+              categoria &&
+              setDespesa({ ...despesa, categoria_idcategoria: categoria.id })
+            }
+            renderInput={(params) => (
+              <TextField color='secondary' {...params} label='Categoria' />
+            )}
           />
         </DialogContentText>
         <DialogActions>
           <Button
             sx={{ w: "165px", margin: "auto", marginBottom: "30px" }}
             variant='borderSecondary'
+            onClick={handleSubmit}
           >
             Salvar
           </Button>
